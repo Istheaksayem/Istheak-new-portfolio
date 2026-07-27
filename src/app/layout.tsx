@@ -4,7 +4,9 @@ import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { LenisProvider } from "@/components/layout/LenisProvider";
-import { OrbEffect } from "@/components/react-bits/OrbEffect";
+import { CustomCursor } from "@/components/ui/CustomCursor";
+import { NoiseOverlay } from "@/components/ui/NoiseOverlay";
+import { ScrollProgressRing } from "@/components/ui/ScrollProgressRing";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -38,9 +40,12 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${inter.variable} ${jetbrainsMono.variable} scroll-smooth`}
+      suppressHydrationWarning
     >
       <body className="min-h-full bg-background font-sans text-foreground antialiased">
-        <OrbEffect color="#6C63FF" count={12} speed={0.25} />
+        <CustomCursor />
+        <NoiseOverlay />
+        <ScrollProgressRing />
         <LenisProvider>
           <Navbar />
           <main className="flex-1">{children}</main>

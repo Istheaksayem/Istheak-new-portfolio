@@ -3,15 +3,34 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { navLinks } from "@/data/navigation";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("#hero");
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    const observers: IntersectionObserver[] = [];
+    for (const link of navLinks) {
+      const el = document.querySelector(link.href);
+      if (!el) continue;
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) setActiveSection(link.href);
+        },
+        { threshold: 0.3, rootMargin: "-80px 0px 0px 0px" },
+      );
+      observer.observe(el);
+      observers.push(observer);
+    }
+    return () => observers.forEach((o) => o.disconnect());
   }, []);
 
   const handleClick = (href: string) => {
@@ -28,12 +47,19 @@ export function Navbar() {
           : "bg-transparent"
       }`}
     >
-      <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
+      <nav
+        className={`mx-auto flex items-center justify-between px-6 transition-all duration-300 ${
+          scrolled ? "h-14" : "h-16"
+        } max-w-6xl`}
+      >
         <button
           onClick={() => handleClick("#hero")}
-          className="text-lg font-bold tracking-tight transition-colors hover:text-primary"
+          className="group text-lg font-bold tracking-tight"
         >
-          Isitheak<span className="text-primary">.</span>
+          <span className="bg-gradient-to-r from-primary to-purple-400 bg-clip-text text-transparent transition-all duration-300 group-hover:from-purple-400 group-hover:to-primary">
+            Isitheak
+          </span>
+          <span className="text-primary">.</span>
         </button>
 
         <div className="hidden items-center gap-1 md:flex">
@@ -41,54 +67,74 @@ export function Navbar() {
             <button
               key={link.href}
               onClick={() => handleClick(link.href)}
-              className="rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+              className={`relative rounded-lg px-3 py-2 text-sm transition-colors ${
+                activeSection === link.href
+                  ? "text-foreground"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
             >
               {link.label}
+              {activeSection === link.href && (
+                <motion.span
+                  layoutId="nav-underline"
+                  className="absolute bottom-0 left-2 right-2 h-0.5 rounded-full bg-primary"
+                />
+              )}
             </button>
           ))}
+          <div className="ml-2 pl-2 border-l border-border">
+            <ThemeToggle />
+          </div>
         </div>
 
-        <button
-          onClick={() => setMobileOpen(!mobileOpen)}
-          className="flex h-9 w-9 items-center justify-center rounded-lg md:hidden"
-          aria-label="Toggle menu"
-        >
-          <div className="flex flex-col gap-1.5">
-            <motion.span
-              animate={mobileOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
-              className="block h-px w-5 bg-foreground"
-            />
-            <motion.span
-              animate={mobileOpen ? { opacity: 0 } : { opacity: 1 }}
-              className="block h-px w-5 bg-foreground"
-            />
-            <motion.span
-              animate={mobileOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
-              className="block h-px w-5 bg-foreground"
-            />
-          </div>
-        </button>
+        <div className="flex items-center gap-2 md:hidden">
+          <ThemeToggle />
+          <button
+            onClick={() => setMobileOpen(!mobileOpen)}
+            className="flex h-9 w-9 items-center justify-center rounded-lg"
+            aria-label="Toggle menu"
+          >
+            <div className="flex flex-col gap-1.5">
+              <motion.span
+                animate={mobileOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
+                className="block h-px w-5 bg-foreground"
+              />
+              <motion.span
+                animate={mobileOpen ? { opacity: 0 } : { opacity: 1 }}
+                className="block h-px w-5 bg-foreground"
+              />
+              <motion.span
+                animate={mobileOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
+                className="block h-px w-5 bg-foreground"
+              />
+            </div>
+          </button>
+        </div>
       </nav>
 
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="overflow-hidden border-b border-border/40 bg-background/95 backdrop-blur-xl"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 top-14 z-40 flex flex-col items-center justify-center gap-6 bg-background/95 backdrop-blur-xl"
           >
-            <div className="flex flex-col gap-1 px-6 pb-4 pt-2">
-              {navLinks.map((link) => (
-                <button
-                  key={link.href}
-                  onClick={() => handleClick(link.href)}
-                  className="rounded-lg px-3 py-2.5 text-left text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-                >
-                  {link.label}
-                </button>
-              ))}
-            </div>
+            {navLinks.map((link, i) => (
+              <motion.button
+                key={link.href}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ delay: i * 0.06 }}
+                onClick={() => handleClick(link.href)}
+                className={`text-2xl font-medium transition-colors hover:text-primary ${
+                  activeSection === link.href ? "text-primary" : "text-foreground"
+                }`}
+              >
+                {link.label}
+              </motion.button>
+            ))}
           </motion.div>
         )}
       </AnimatePresence>
