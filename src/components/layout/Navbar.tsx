@@ -57,7 +57,7 @@ export function Navbar() {
           className="group text-lg font-bold tracking-tight"
         >
           <span className="bg-gradient-to-r from-primary to-purple-400 bg-clip-text text-transparent transition-all duration-300 group-hover:from-purple-400 group-hover:to-primary">
-            Isitheak
+            Istheak
           </span>
           <span className="text-primary">.</span>
         </button>

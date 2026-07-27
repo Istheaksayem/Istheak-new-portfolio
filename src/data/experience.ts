@@ -9,55 +9,30 @@ export interface Experience {
 
 export const experiences: Experience[] = [
   {
-    role: "Senior Full-Stack Developer",
-    company: "TechCorp Inc.",
-    location: "San Francisco, CA",
-    period: "Jan 2024 — Present",
+    role: "MERN Stack Developer",
+    company: "Self-Directed Projects",
+    location: "Bangladesh",
+    period: "Jan 2025 — Present",
     description:
-      "Leading the development of a next-gen SaaS platform, architecting microservices and mentoring junior developers.",
+      "Building full-stack web applications independently, focusing on real-world features like real-time communication, payment integration, authentication, and role-based access control.",
     highlights: [
-      "Architected microservices reducing API latency by 40%",
-      "Led migration from legacy codebase to Next.js + TypeScript",
-      "Mentored 4 junior developers through structured code reviews",
+      "Developed real-time GPS tracking and ride booking with Socket.io for a ride-sharing platform",
+      "Integrated SSLCommerz payment gateway for secure online transactions",
+      "Implemented KYC and facial verification systems to enhance user safety",
+      "Built multi-role RBAC systems with admin approval workflows",
     ],
   },
   {
-    role: "Full-Stack Developer",
-    company: "DataFlow Labs",
-    location: "Austin, TX",
-    period: "Jun 2022 — Dec 2023",
-    description:
-      "Built scalable data visualization tools and real-time collaboration features for enterprise clients.",
-    highlights: [
-      "Developed real-time dashboards serving 10K+ concurrent users",
-      "Implemented CI/CD pipelines reducing deployment time by 60%",
-      "Contributed to open-source data visualization library",
-    ],
-  },
-  {
-    role: "Frontend Developer",
-    company: "WebCraft Agency",
+    role: "Complete Web Development Course",
+    company: "Programming Hero",
     location: "Remote",
-    period: "Aug 2020 — May 2022",
+    period: "2024 — 2025",
     description:
-      "Created responsive, animated web experiences for diverse clients across industries.",
+      "Completed an intensive full-stack web development program with excellence, covering modern frontend and backend technologies.",
     highlights: [
-      "Delivered 15+ client projects on time and under budget",
-      "Built reusable component library used across all projects",
-      "Introduced animation-driven interactions improving engagement by 35%",
-    ],
-  },
-  {
-    role: "Junior Developer",
-    company: "StartUp Hub",
-    location: "New York, NY",
-    period: "Jan 2019 — Jul 2020",
-    description:
-      "Started career building landing pages and simple web apps while learning modern development practices.",
-    highlights: [
-      "Transitioned team from jQuery to React",
-      "Built automated testing suite achieving 90% code coverage",
-      "Won internal hackathon with AI-powered chat application",
+      "Mastered MERN stack including React, Node.js, Express.js, and MongoDB",
+      "Built multiple full-stack projects demonstrating real-world capabilities",
+      "Earned certification with excellence for outstanding performance",
     ],
   },
 ];

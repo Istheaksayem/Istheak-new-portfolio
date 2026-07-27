@@ -10,63 +10,33 @@ export interface Project {
 
 export const projects: Project[] = [
   {
-    title: "Synthwave Dashboard",
+    title: "OnWay Ride Sharing Platform",
     description:
-      "A real-time analytics dashboard with interactive charts, dark synthwave theme, and WebSocket-driven live data updates.",
-    tags: ["React", "TypeScript", "D3.js", "WebSocket"],
+      "A modern ride-sharing platform featuring real-time booking, live GPS tracking, secure KYC and facial verification, and SSLCommerz payment gateway integration. Built collaboratively as part of a development team.",
+    tags: ["Next.js", "Node.js", "Express.js", "MongoDB", "Socket.io", "JWT", "SSLCommerz", "Tailwind CSS"],
     image: "/placeholder.svg",
     liveUrl: "#",
     repoUrl: "#",
     featured: true,
   },
   {
-    title: "EcoTrack",
+    title: "Local Chef Bazar",
     description:
-      "A carbon footprint tracker that visualizes your environmental impact with actionable recommendations and progress tracking.",
-    tags: ["Next.js", "Prisma", "PostgreSQL", "Chart.js"],
+      "A full-stack food marketplace connecting home chefs with customers. Features a multi-role RBAC system (Admin, Chef, User) with role upgrade requests, admin approval workflows, and secure payments.",
+    tags: ["React.js", "Node.js", "Express.js", "MongoDB", "Firebase Auth", "JWT", "Stripe", "Tailwind CSS"],
     image: "/placeholder.svg",
     liveUrl: "#",
     repoUrl: "#",
     featured: true,
   },
   {
-    title: "CodeCollab",
+    title: "Freelance Marketplace",
     description:
-      "A real-time collaborative code editor with syntax highlighting, video chat, and AI-powered code suggestions.",
-    tags: ["React", "Socket.io", "WebRTC", "Monaco"],
+      "A secure freelance marketplace connecting clients with freelancers. Includes complete CRUD job posting, user-specific task management, Firebase authentication, and responsive UI for seamless collaboration.",
+    tags: ["React.js", "Tailwind CSS", "React Router", "Node.js", "Express.js", "MongoDB", "Firebase Auth", "JWT"],
     image: "/placeholder.svg",
     liveUrl: "#",
     repoUrl: "#",
     featured: true,
-  },
-  {
-    title: "Artisan Marketplace",
-    description:
-      "An e-commerce platform for handmade goods with AI recommendation engine and seamless checkout experience.",
-    tags: ["Next.js", "Stripe", "Redis", "TensorFlow"],
-    image: "/placeholder.svg",
-    liveUrl: "#",
-    repoUrl: "#",
-    featured: false,
-  },
-  {
-    title: "WeatherViz",
-    description:
-      "A 3D weather visualization app with interactive globe, real-time forecasts, and historical climate data.",
-    tags: ["React", "Three.js", "GraphQL", "Mapbox"],
-    image: "/placeholder.svg",
-    liveUrl: "#",
-    repoUrl: "#",
-    featured: false,
-  },
-  {
-    title: "DevBlog Engine",
-    description:
-      "A headless CMS for developers with MDX support, syntax highlighting, and automated social media sharing.",
-    tags: ["Next.js", "MDX", "AWS", "Redis"],
-    image: "/placeholder.svg",
-    liveUrl: "#",
-    repoUrl: "#",
-    featured: false,
   },
 ];

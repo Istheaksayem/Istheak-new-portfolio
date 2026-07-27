@@ -21,13 +21,13 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Isitheak | Full-Stack Developer",
+  title: "Istheak Ahmed | MERN Stack Developer",
   description:
-    "Full-stack developer specializing in modern web applications with Next.js, TypeScript, and creative animations.",
+    "MERN Stack Developer specializing in scalable web applications with React, Next.js, Node.js, MongoDB, and real-time features.",
   openGraph: {
-    title: "Isitheak | Full-Stack Developer",
+    title: "Istheak Ahmed | MERN Stack Developer",
     description:
-      "Full-stack developer specializing in modern web applications with Next.js, TypeScript, and creative animations.",
+      "MERN Stack Developer specializing in scalable web applications with React, Next.js, Node.js, MongoDB, and real-time features.",
   },
 };
 
