@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "motion/react";
 import { profile } from "@/data/profile";
 import { SplitText } from "@/components/ui/SplitText";
@@ -107,10 +108,14 @@ export function Hero() {
           transition={{ duration: 1, delay: 0.5 }}
           className="relative"
         >
-          <div className="flex h-80 w-80 items-center justify-center rounded-full bg-gradient-to-br from-primary/10 via-purple-300/10 to-pink-300/10 ring-1 ring-border/30">
-            <span className="text-8xl font-bold text-primary/20">
-              {profile.name.charAt(0)}
-            </span>
+          <div className="relative flex h-80 w-80 items-center justify-center overflow-hidden rounded-full ring-1 ring-border/30">
+            <Image
+              src={profile.image}
+              alt={profile.name}
+              fill
+              className="object-cover"
+              priority
+            />
           </div>
           <div className="absolute -inset-4 animate-spin-slow rounded-full border border-dashed border-primary/20" />
           <div className="absolute -inset-8 animate-spin-slow rounded-full border border-dashed border-purple-300/10" style={{ animationDirection: "reverse", animationDuration: "12s" }} />

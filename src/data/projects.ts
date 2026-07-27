@@ -24,7 +24,7 @@ export const projects: Project[] = [
     description:
       "A full-stack food marketplace connecting home chefs with customers. Features a multi-role RBAC system (Admin, Chef, User) with role upgrade requests, admin approval workflows, and secure payments.",
     tags: ["React.js", "Node.js", "Express.js", "MongoDB", "Firebase Auth", "JWT", "Stripe", "Tailwind CSS"],
-    image: "/placeholder.svg",
+    image: "/LocalChef.png",
     liveUrl: "#",
     repoUrl: "#",
     featured: true,
@@ -34,7 +34,7 @@ export const projects: Project[] = [
     description:
       "A secure freelance marketplace connecting clients with freelancers. Includes complete CRUD job posting, user-specific task management, Firebase authentication, and responsive UI for seamless collaboration.",
     tags: ["React.js", "Tailwind CSS", "React Router", "Node.js", "Express.js", "MongoDB", "Firebase Auth", "JWT"],
-    image: "/placeholder.svg",
+    image: "/Freelance-MarketPlace.png",
     liveUrl: "#",
     repoUrl: "#",
     featured: true,

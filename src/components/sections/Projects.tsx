@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "motion/react";
 import { projects } from "@/data/projects";
 import { AnimatedSection } from "@/components/ui/AnimatedSection";
@@ -42,8 +43,13 @@ function ProjectModal({
           </svg>
         </button>
 
-        <div className="mb-6 aspect-video rounded-xl bg-muted flex items-center justify-center text-6xl font-bold text-muted-foreground/10">
-          {project.title.charAt(0)}
+        <div className="relative mb-6 aspect-video overflow-hidden rounded-xl bg-muted">
+          <Image
+            src={project.image}
+            alt={project.title}
+            fill
+            className="object-cover"
+          />
         </div>
 
         <h2 className="mb-2 text-2xl font-bold">{project.title}</h2>
@@ -114,9 +120,12 @@ function ProjectCard({
               featured ? "aspect-[2/1]" : "aspect-video"
             }`}
           >
-            <div className="absolute inset-0 flex items-center justify-center text-5xl font-bold text-muted-foreground/10 transition-transform duration-500 group-hover:scale-110">
-              {project.title.charAt(0)}
-            </div>
+            <Image
+              src={project.image}
+              alt={project.title}
+              fill
+              className="object-cover transition-transform duration-500 group-hover:scale-110"
+            />
             <div className="absolute inset-0 bg-gradient-to-t from-card/60 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
           </div>
           <div className="flex flex-1 flex-col gap-3 p-6">
