@@ -5,8 +5,6 @@ import { useRef, type MouseEvent } from "react";
 interface MagneticButtonProps {
   children: React.ReactNode;
   className?: string;
-  as?: "button" | "a";
-  href?: string;
   onClick?: () => void;
   strength?: number;
 }
@@ -14,8 +12,6 @@ interface MagneticButtonProps {
 export function MagneticButton({
   children,
   className = "",
-  as: Tag = "button",
-  href,
   onClick,
   strength = 0.25,
 }: MagneticButtonProps) {
@@ -38,19 +34,16 @@ export function MagneticButton({
     }, 400);
   };
 
-  const El = Tag === "a" ? "a" : "button";
-
   return (
-    <div ref={ref} className="inline-block" style={{ willChange: "transform" }}>
-      <El
-        href={href}
-        onClick={onClick}
-        onMouseMove={onMove}
-        onMouseLeave={onLeave}
-        className={className}
-      >
-        {children}
-      </El>
+    <div 
+      ref={ref} 
+      className={className ? `inline-block ${className}` : "inline-block"} 
+      style={{ willChange: "transform" }}
+      onMouseMove={onMove}
+      onMouseLeave={onLeave}
+      onClick={onClick}
+    >
+      {children}
     </div>
   );
 }

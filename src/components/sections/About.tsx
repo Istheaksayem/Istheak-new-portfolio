@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Image from "next/image";
 import { motion, useInView } from "motion/react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -51,9 +52,12 @@ export function About() {
                 transition={{ duration: 1.2, ease: [0.25, 0.46, 0.45, 0.94] }}
                 className="relative mx-auto aspect-square w-64 overflow-hidden rounded-full md:w-72"
               >
-                <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-primary/20 to-purple-300/20 text-7xl font-bold text-primary/30">
-                  {profile.name.charAt(0)}
-                </div>
+                <Image
+                  src={profile.image}
+                  alt={profile.name}
+                  fill
+                  className="object-cover"
+                />
                 <div className="absolute inset-0 rounded-full ring-1 ring-inset ring-border/30" />
               </motion.div>
               <svg
