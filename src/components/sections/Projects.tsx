@@ -32,9 +32,9 @@ function ProjectModal({
         exit={{ opacity: 0, scale: 0.9, y: 40 }}
         transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
         onClick={(e) => e.stopPropagation()}
-        className="relative flex max-h-[85vh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-border/50 bg-card shadow-soft"
+        className="relative mx-2 flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-border/50 bg-card shadow-soft sm:mx-4"
       >
-        <div className="overflow-y-auto p-6 sm:p-8 pb-6">
+        <div className="overflow-y-auto p-4 pb-4 sm:p-6 sm:pb-6 lg:p-8">
           <button
             onClick={onClose}
             className="absolute right-4 top-4 z-10 flex h-8 w-8 items-center justify-center rounded-full border border-border bg-background/50 text-muted-foreground backdrop-blur-sm transition-colors hover:bg-muted hover:text-foreground"
@@ -71,7 +71,7 @@ function ProjectModal({
 
         </div>
         
-        <div className="border-t border-border/50 bg-muted/20 p-6 sm:px-8 sm:py-6">
+        <div className="border-t border-border/50 bg-muted/20 p-4 sm:px-6 sm:py-6 lg:px-8">
           <div className="flex flex-wrap gap-3">
             {project.liveUrl && (
               <a
@@ -119,7 +119,7 @@ function ProjectCard({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
-      className={featured ? "sm:col-span-2 lg:col-span-2" : ""}
+      className={featured ? "md:col-span-2 lg:col-span-2" : ""}
     >
       <SpotlightCard
         className="group h-full cursor-pointer"

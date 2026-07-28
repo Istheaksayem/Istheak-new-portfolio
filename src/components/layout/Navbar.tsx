@@ -17,6 +17,15 @@ export function Navbar() {
   }, []);
 
   useEffect(() => {
+    if (mobileOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => { document.body.style.overflow = ""; };
+  }, [mobileOpen]);
+
+  useEffect(() => {
     const observers: IntersectionObserver[] = [];
     for (const link of navLinks) {
       const el = document.querySelector(link.href);
@@ -118,7 +127,7 @@ export function Navbar() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 top-14 z-40 flex flex-col items-center justify-center gap-6 bg-background/95 backdrop-blur-xl"
+            className="fixed inset-0 top-14 z-40 flex flex-col items-center justify-center gap-8 bg-background/95 backdrop-blur-xl px-6"
           >
             {navLinks.map((link, i) => (
               <motion.button
@@ -128,7 +137,7 @@ export function Navbar() {
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ delay: i * 0.06 }}
                 onClick={() => handleClick(link.href)}
-                className={`text-2xl font-medium transition-colors hover:text-primary ${
+                className={`w-full max-w-xs py-3 text-center text-xl font-medium transition-colors hover:text-primary sm:text-2xl ${
                   activeSection === link.href ? "text-primary" : "text-foreground"
                 }`}
               >

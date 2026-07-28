@@ -19,8 +19,8 @@ export function Skills() {
           description="A comprehensive toolkit I've built over years of hands-on development."
         />
 
-        <div className="mb-10 flex justify-center">
-          <div className="inline-flex rounded-full border border-border/50 bg-card p-1 shadow-sm">
+        <div className="mb-10 flex justify-center overflow-x-auto scrollbar-none">
+          <div className="inline-flex flex-shrink-0 rounded-full border border-border/50 bg-card p-1 shadow-sm">
             {skillCategories.map((cat, i) => (
               <button
                 key={cat.title}

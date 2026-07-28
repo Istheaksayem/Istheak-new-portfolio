@@ -27,9 +27,11 @@ export function Hero() {
       className="relative grid min-h-screen items-center overflow-hidden lg:grid-cols-2"
     >
       <GradientMesh />
-      <FloatingBadges />
+      <div className="hidden lg:block">
+        <FloatingBadges />
+      </div>
 
-      <div className="relative z-10 flex flex-col justify-center px-6 py-32 lg:px-12 lg:py-0">
+      <div className="relative z-10 flex flex-col justify-center px-6 py-20 lg:px-12 lg:py-0">
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -45,7 +47,7 @@ export function Hero() {
           </span>
         </motion.div>
 
-        <div className="mb-4 text-5xl font-bold leading-tight tracking-tight sm:text-6xl lg:text-7xl xl:text-8xl">
+        <div className="mb-4 text-4xl font-bold leading-tight tracking-tight xs:text-5xl sm:text-6xl lg:text-7xl xl:text-8xl">
           <SplitText
             text={`Hi, I'm ${profile.name}`}
             delay={0.2}
@@ -67,7 +69,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.0, duration: 0.5 }}
-          className="mb-8 max-w-md text-muted-foreground leading-relaxed"
+          className="mb-8 max-w-sm text-muted-foreground leading-relaxed sm:max-w-md"
         >
           {profile.title} specializing in crafting performant, visually
           stunning web applications with modern technologies.

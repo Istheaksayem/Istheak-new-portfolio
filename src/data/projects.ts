@@ -9,6 +9,16 @@ export interface Project {
 }
 
 export const projects: Project[] = [
+  // {
+  //   title: "Hospital management",
+  //   description:
+  //     "A modern ride-sharing platform featuring real-time booking, live GPS tracking, secure KYC and facial verification, and SSLCommerz payment gateway integration. Built collaboratively as part of a development team.",
+  //   tags: ["Next.js", "Node.js", "Express.js", "MongoDB", "Socket.io", "JWT", "SSLCommerz", "Tailwind CSS"],
+  //   image: "/onway.png",
+  //   liveUrl: "https://onway-5g8a.onrender.com",
+  //   repoUrl: "https://github.com/Zarif207/OnWay",
+  //   featured: true,
+  // },
   {
     title: "OnWay Ride Sharing Platform",
     description:
