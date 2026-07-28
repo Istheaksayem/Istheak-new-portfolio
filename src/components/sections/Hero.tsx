@@ -27,10 +27,8 @@ export function Hero() {
       className="relative grid min-h-screen items-center overflow-hidden lg:grid-cols-2"
     >
       <GradientMesh />
-      <div className="hidden lg:block">
-        <FloatingBadges />
-      </div>
 
+      {/* LEFT — Text Content */}
       <div className="relative z-10 flex flex-col justify-center px-6 py-20 lg:px-12 lg:py-0">
         <motion.div
           initial={{ opacity: 0, y: 10 }}
@@ -103,7 +101,9 @@ export function Hero() {
         </motion.div>
       </div>
 
+      {/* RIGHT — Image + Floating Badges */}
       <div className="relative hidden items-center justify-center lg:flex">
+        <FloatingBadges />
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
