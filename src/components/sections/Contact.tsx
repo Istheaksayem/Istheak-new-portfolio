@@ -1,34 +1,199 @@
 "use client";
 
-import { useState } from "react";
-import { motion } from "motion/react";
+import { useState, useCallback } from "react";
+import { motion, AnimatePresence } from "motion/react";
 import { AnimatedSection } from "@/components/ui/AnimatedSection";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 import { profile } from "@/data/profile";
 
+// ─── Types ─────────────────────────────────────────────────────────────────────
+
+type FormState = {
+  name: string;
+  email: string;
+  message: string;
+};
+
+type FormErrors = Partial<FormState>;
+
+type SendStatus = "idle" | "sending" | "success" | "error";
+
+// ─── Validation (client-side) ──────────────────────────────────────────────────
+
+function validate(form: FormState): FormErrors {
+  const errors: FormErrors = {};
+  if (!form.name.trim() || form.name.trim().length < 2)
+    errors.name = "Name must be at least 2 characters.";
+  if (!form.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
+    errors.email = "Please enter a valid email address.";
+  if (!form.message.trim() || form.message.trim().length < 10)
+    errors.message = "Message must be at least 10 characters.";
+  return errors;
+}
+
+// ─── Inline field error ────────────────────────────────────────────────────────
+
+function FieldError({ message }: { message?: string }) {
+  return (
+    <AnimatePresence>
+      {message && (
+        <motion.p
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: "auto" }}
+          exit={{ opacity: 0, height: 0 }}
+          transition={{ duration: 0.2 }}
+          className="mt-1 text-xs text-red-500"
+        >
+          {message}
+        </motion.p>
+      )}
+    </AnimatePresence>
+  );
+}
+
+// ─── Toast ─────────────────────────────────────────────────────────────────────
+
+function Toast({
+  status,
+  onDismiss,
+}: {
+  status: "success" | "error";
+  onDismiss: () => void;
+}) {
+  const ok = status === "success";
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: -12, scale: 0.96 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      exit={{ opacity: 0, y: -10, scale: 0.96 }}
+      transition={{ type: "spring", stiffness: 380, damping: 26 }}
+      role="alert"
+      aria-live="polite"
+      className={`flex items-start gap-3 rounded-2xl border px-5 py-4 text-sm shadow-lg ${
+        ok
+          ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+          : "border-red-500/30 bg-red-500/10 text-red-600 dark:text-red-400"
+      }`}
+    >
+      <span className="mt-0.5 shrink-0">
+        {ok ? (
+          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+          </svg>
+        ) : (
+          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+          </svg>
+        )}
+      </span>
+      <span className="flex-1 font-medium">
+        {ok
+          ? "Message sent! I'll get back to you soon."
+          : "Something went wrong. Please try again or email me directly."}
+      </span>
+      <button
+        onClick={onDismiss}
+        aria-label="Dismiss"
+        className="ml-auto shrink-0 opacity-60 transition-opacity hover:opacity-100"
+      >
+        <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </motion.div>
+  );
+}
+
+// ─── Main Component ────────────────────────────────────────────────────────────
+
 export function Contact() {
-  const [form, setForm] = useState({ name: "", email: "", message: "" });
-  const [sent, setSent] = useState(false);
+  const [form, setForm] = useState<FormState>({ name: "", email: "", message: "" });
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [touched, setTouched] = useState<Partial<Record<keyof FormState, boolean>>>({});
+  const [sendStatus, setSendStatus] = useState<SendStatus>("idle");
   const [copied, setCopied] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setSent(true);
-    setTimeout(() => {
-      window.location.href = `mailto:${profile.socials.email}?subject=Portfolio Contact from ${form.name}&body=${encodeURIComponent(form.message)}`;
-    }, 600);
-  };
+  const isSending = sendStatus === "sending";
+  const isSuccess = sendStatus === "success";
+  const isError = sendStatus === "error";
 
-  const copyEmail = async () => {
+  // ── Handlers ───────────────────────────────────────────────────────────────
+
+  const handleChange = useCallback(
+    (field: keyof FormState, value: string) => {
+      setForm((prev) => ({ ...prev, [field]: value }));
+      if (touched[field]) {
+        setErrors((prev) => {
+          const fieldErrors = validate({ ...form, [field]: value });
+          const next = { ...prev };
+          if (fieldErrors[field]) next[field] = fieldErrors[field];
+          else delete next[field];
+          return next;
+        });
+      }
+    },
+    [form, touched]
+  );
+
+  const handleBlur = useCallback(
+    (field: keyof FormState) => {
+      setTouched((prev) => ({ ...prev, [field]: true }));
+      const fieldErrors = validate(form);
+      if (fieldErrors[field])
+        setErrors((prev) => ({ ...prev, [field]: fieldErrors[field] }));
+    },
+    [form]
+  );
+
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
+      setTouched({ name: true, email: true, message: true });
+      const validationErrors = validate(form);
+      if (Object.keys(validationErrors).length > 0) {
+        setErrors(validationErrors);
+        return;
+      }
+
+      setSendStatus("sending");
+
+      try {
+        const res = await fetch("/api/contact", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: form.name.trim(),
+            email: form.email.trim(),
+            message: form.message.trim(),
+          }),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) throw new Error(data.error ?? "Unknown error");
+
+        setSendStatus("success");
+        setForm({ name: "", email: "", message: "" });
+        setErrors({});
+        setTouched({});
+        setTimeout(() => setSendStatus("idle"), 6000);
+      } catch (err) {
+        console.error("[Contact] Submit failed:", err);
+        setSendStatus("error");
+        setTimeout(() => setSendStatus("idle"), 8000);
+      }
+    },
+    [form]
+  );
+
+  const copyEmail = useCallback(async () => {
     await navigator.clipboard.writeText(profile.socials.email);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
-  };
+  }, []);
 
-  const handleChange = (field: string, value: string) => {
-    setForm((prev) => ({ ...prev, [field]: value }));
-  };
+  // ── Render ─────────────────────────────────────────────────────────────────
 
   return (
     <AnimatedSection id="contact" className="bg-muted/30 px-6 py-24 sm:py-32">
@@ -45,21 +210,44 @@ export function Contact() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             onSubmit={handleSubmit}
+            noValidate
             className="space-y-5 lg:col-span-3"
           >
+            {/* Toast */}
+            <AnimatePresence mode="wait">
+              {(isSuccess || isError) && (
+                <Toast
+                  status={isSuccess ? "success" : "error"}
+                  onDismiss={() => setSendStatus("idle")}
+                />
+              )}
+            </AnimatePresence>
+
+            {/* Name */}
             <div className="space-y-2">
               <label htmlFor="name" className="text-sm font-medium">
                 Name
               </label>
               <input
                 id="name"
+                type="text"
                 required
+                autoComplete="name"
                 value={form.name}
                 onChange={(e) => handleChange("name", e.target.value)}
-                className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none transition-all duration-300 focus:border-primary focus:ring-2 focus:ring-primary/10"
+                onBlur={() => handleBlur("name")}
+                aria-invalid={!!errors.name}
+                className={`w-full rounded-xl border bg-background px-4 py-3 text-sm outline-none transition-all duration-300 focus:ring-2 focus:ring-primary/10 ${
+                  errors.name
+                    ? "border-red-500 focus:border-red-500"
+                    : "border-border focus:border-primary"
+                }`}
                 placeholder="Your name"
               />
+              <FieldError message={errors.name} />
             </div>
+
+            {/* Email */}
             <div className="space-y-2">
               <label htmlFor="email" className="text-sm font-medium">
                 Email
@@ -68,12 +256,22 @@ export function Contact() {
                 id="email"
                 type="email"
                 required
+                autoComplete="email"
                 value={form.email}
                 onChange={(e) => handleChange("email", e.target.value)}
-                className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none transition-all duration-300 focus:border-primary focus:ring-2 focus:ring-primary/10"
+                onBlur={() => handleBlur("email")}
+                aria-invalid={!!errors.email}
+                className={`w-full rounded-xl border bg-background px-4 py-3 text-sm outline-none transition-all duration-300 focus:ring-2 focus:ring-primary/10 ${
+                  errors.email
+                    ? "border-red-500 focus:border-red-500"
+                    : "border-border focus:border-primary"
+                }`}
                 placeholder="your@email.com"
               />
+              <FieldError message={errors.email} />
             </div>
+
+            {/* Message */}
             <div className="space-y-2">
               <label htmlFor="message" className="text-sm font-medium">
                 Message
@@ -85,29 +283,39 @@ export function Contact() {
                 maxLength={500}
                 value={form.message}
                 onChange={(e) => handleChange("message", e.target.value)}
-                className="w-full resize-none rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none transition-all duration-300 focus:border-primary focus:ring-2 focus:ring-primary/10"
+                onBlur={() => handleBlur("message")}
+                aria-invalid={!!errors.message}
+                className={`w-full resize-none rounded-xl border bg-background px-4 py-3 text-sm outline-none transition-all duration-300 focus:ring-2 focus:ring-primary/10 ${
+                  errors.message
+                    ? "border-red-500 focus:border-red-500"
+                    : "border-border focus:border-primary"
+                }`}
                 placeholder="Tell me about your project..."
               />
-              <div className="flex justify-end">
-                <span className="text-xs text-muted-foreground">
+              <div className="flex items-center justify-between">
+                <FieldError message={errors.message} />
+                <span className="ml-auto text-xs text-muted-foreground">
                   {form.message.length}/500
                 </span>
               </div>
             </div>
+
+            {/* Submit */}
             <MagneticButton strength={0.15}>
               <motion.button
                 type="submit"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                disabled={sent}
-                className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-8 text-sm font-medium text-background transition-all hover:shadow-glow disabled:opacity-80"
+                whileHover={!isSending ? { scale: 1.02 } : undefined}
+                whileTap={!isSending ? { scale: 0.98 } : undefined}
+                disabled={isSending}
+                className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-8 text-sm font-medium text-background transition-all hover:shadow-glow disabled:cursor-not-allowed disabled:opacity-70"
               >
-                {sent ? (
+                {isSending ? (
                   <>
-                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                    <svg className="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
                     </svg>
-                    Message Sent!
+                    Sending…
                   </>
                 ) : (
                   "Send Message"
@@ -116,6 +324,7 @@ export function Contact() {
             </MagneticButton>
           </motion.form>
 
+          {/* Right column — unchanged */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}

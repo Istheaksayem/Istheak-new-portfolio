@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 
 function getInitialDark(): boolean {
@@ -13,7 +13,13 @@ function getInitialDark(): boolean {
 }
 
 export function ThemeToggle() {
-  const [dark, setDark] = useState(getInitialDark);
+  // Start with null so SSR and first client render agree (no icon rendered)
+  const [dark, setDark] = useState<boolean | null>(null);
+
+  // After hydration, read the real preference from the client
+  useEffect(() => {
+    setDark(getInitialDark());
+  }, []);
 
   const toggle = () => {
     const next = !dark;
@@ -21,6 +27,18 @@ export function ThemeToggle() {
     document.documentElement.classList.toggle("dark", next);
     localStorage.setItem("theme", next ? "dark" : "light");
   };
+
+  // Render an invisible placeholder until the client has mounted.
+  // This guarantees server HTML === first client render → no hydration mismatch.
+  if (dark === null) {
+    return (
+      <button
+        className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground"
+        aria-label="Toggle theme"
+        disabled
+      />
+    );
+  }
 
   return (
     <button
