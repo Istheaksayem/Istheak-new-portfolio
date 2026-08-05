@@ -1,27 +1,39 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import Lenis from "lenis";
 
 export function LenisProvider({ children }: { children: React.ReactNode }) {
-  const containerRef = useRef<HTMLDivElement>(null);
-
   useEffect(() => {
     const lenis = new Lenis({
-      duration: 1.2,
+      duration: 1.4,
       easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: "vertical",
       smoothWheel: true,
+      wheelMultiplier: 1,
+      touchMultiplier: 2,
+      infinite: false,
     });
+
+    // Expose lenis globally so Navbar anchor links can use lenis.scrollTo()
+    (window as Window & { lenis?: Lenis }).lenis = lenis;
+
+    let rafId: number;
 
     const raf = (time: number) => {
       lenis.raf(time);
-      requestAnimationFrame(raf);
+      rafId = requestAnimationFrame(raf);
     };
-    requestAnimationFrame(raf);
 
-    return () => lenis.destroy();
+    rafId = requestAnimationFrame(raf);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      lenis.destroy();
+      delete (window as Window & { lenis?: Lenis }).lenis;
+    };
   }, []);
 
-  return <div ref={containerRef}>{children}</div>;
+  // No wrapper div — render children directly to avoid extra DOM nodes
+  return <>{children}</>;
 }

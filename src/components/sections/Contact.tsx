@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { AnimatedSection } from "@/components/ui/AnimatedSection";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -52,7 +52,9 @@ function FieldError({ message }: { message?: string }) {
   );
 }
 
-// ─── Toast ─────────────────────────────────────────────────────────────────────
+// ─── Floating Toast ────────────────────────────────────────────────────────────
+
+const TOAST_DURATION_MS = 5000;
 
 function Toast({
   status,
@@ -62,45 +64,85 @@ function Toast({
   onDismiss: () => void;
 }) {
   const ok = status === "success";
+  const [progress, setProgress] = useState(100);
+
+  useEffect(() => {
+    const start = Date.now();
+    const interval = setInterval(() => {
+      const elapsed = Date.now() - start;
+      const remaining = Math.max(0, 100 - (elapsed / TOAST_DURATION_MS) * 100);
+      setProgress(remaining);
+      if (remaining === 0) clearInterval(interval);
+    }, 30);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: -12, scale: 0.96 }}
+      initial={{ opacity: 0, y: 80, scale: 0.92 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
-      exit={{ opacity: 0, y: -10, scale: 0.96 }}
-      transition={{ type: "spring", stiffness: 380, damping: 26 }}
+      exit={{ opacity: 0, y: 40, scale: 0.92 }}
+      transition={{ type: "spring", stiffness: 340, damping: 28 }}
       role="alert"
       aria-live="polite"
-      className={`flex items-start gap-3 rounded-2xl border px-5 py-4 text-sm shadow-lg ${
+      className={`relative w-[340px] max-w-[90vw] overflow-hidden rounded-2xl border shadow-2xl backdrop-blur-md ${
         ok
-          ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
-          : "border-red-500/30 bg-red-500/10 text-red-600 dark:text-red-400"
+          ? "border-emerald-500/30 bg-emerald-950/90 text-emerald-300 dark:bg-emerald-950/95"
+          : "border-red-500/30 bg-red-950/90 text-red-300 dark:bg-red-950/95"
       }`}
     >
-      <span className="mt-0.5 shrink-0">
-        {ok ? (
-          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+      {/* Content */}
+      <div className="flex items-start gap-3 px-5 py-4">
+        {/* Icon */}
+        <span
+          className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl ${
+            ok ? "bg-emerald-500/20" : "bg-red-500/20"
+          }`}
+        >
+          {ok ? (
+            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+            </svg>
+          ) : (
+            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+            </svg>
+          )}
+        </span>
+
+        {/* Text */}
+        <div className="flex-1 min-w-0">
+          <p className="text-sm font-semibold leading-snug">
+            {ok ? "Message Sent Successfully! 🎉" : "Failed to Send"}
+          </p>
+          <p className="mt-0.5 text-xs opacity-70">
+            {ok
+              ? "I'll get back to you as soon as possible."
+              : "Something went wrong. Please try again or email me directly."}
+          </p>
+        </div>
+
+        {/* Dismiss */}
+        <button
+          onClick={onDismiss}
+          aria-label="Dismiss"
+          className="ml-1 shrink-0 rounded-lg p-1 opacity-50 transition-all hover:opacity-100 hover:bg-white/10"
+        >
+          <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
           </svg>
-        ) : (
-          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
-          </svg>
-        )}
-      </span>
-      <span className="flex-1 font-medium">
-        {ok
-          ? "Message sent! I'll get back to you soon."
-          : "Something went wrong. Please try again or email me directly."}
-      </span>
-      <button
-        onClick={onDismiss}
-        aria-label="Dismiss"
-        className="ml-auto shrink-0 opacity-60 transition-opacity hover:opacity-100"
-      >
-        <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-        </svg>
-      </button>
+        </button>
+      </div>
+
+      {/* Auto-dismiss progress bar */}
+      <div className="h-0.5 w-full bg-white/10">
+        <motion.div
+          className={`h-full ${ok ? "bg-emerald-400" : "bg-red-400"}`}
+          initial={{ width: "100%" }}
+          animate={{ width: `${progress}%` }}
+          transition={{ duration: 0 }}
+        />
+      </div>
     </motion.div>
   );
 }
@@ -213,15 +255,7 @@ export function Contact() {
             noValidate
             className="space-y-5 lg:col-span-3"
           >
-            {/* Toast */}
-            <AnimatePresence mode="wait">
-              {(isSuccess || isError) && (
-                <Toast
-                  status={isSuccess ? "success" : "error"}
-                  onDismiss={() => setSendStatus("idle")}
-                />
-              )}
-            </AnimatePresence>
+
 
             {/* Name */}
             <div className="space-y-2">
@@ -384,6 +418,18 @@ export function Contact() {
           </motion.div>
         </div>
       </div>
+
+      {/* ── Floating Toast (fixed bottom-right) ── */}
+      <AnimatePresence>
+        {(isSuccess || isError) && (
+          <div className="fixed bottom-6 right-6 z-[9999]">
+            <Toast
+              status={isSuccess ? "success" : "error"}
+              onDismiss={() => setSendStatus("idle")}
+            />
+          </div>
+        )}
+      </AnimatePresence>
     </AnimatedSection>
   );
 }
