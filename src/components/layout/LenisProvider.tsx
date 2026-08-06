@@ -16,7 +16,7 @@ export function LenisProvider({ children }: { children: React.ReactNode }) {
     });
 
     // Expose lenis globally so Navbar anchor links can use lenis.scrollTo()
-    (window as Window & { lenis?: Lenis }).lenis = lenis;
+    (window as any).lenis = lenis;
 
     let rafId: number;
 
@@ -30,7 +30,7 @@ export function LenisProvider({ children }: { children: React.ReactNode }) {
     return () => {
       cancelAnimationFrame(rafId);
       lenis.destroy();
-      delete (window as Window & { lenis?: Lenis }).lenis;
+      delete (window as any).lenis;
     };
   }, []);
 
