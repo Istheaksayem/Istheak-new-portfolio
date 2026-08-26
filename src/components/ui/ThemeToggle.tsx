@@ -1,44 +1,39 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useSyncExternalStore } from "react";
 import { motion } from "motion/react";
 
-function getInitialDark(): boolean {
+const themeListeners = new Set<() => void>();
+
+function subscribe(cb: () => void) {
+  themeListeners.add(cb);
+  return () => themeListeners.delete(cb);
+}
+
+function getSnapshot(): boolean {
   if (typeof window === "undefined") return false;
   const stored = localStorage.getItem("theme");
   const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-  const isDark = stored === "dark" || (!stored && prefersDark);
-  document.documentElement.classList.toggle("dark", isDark);
-  return isDark;
+  return stored === "dark" || (!stored && prefersDark);
+}
+
+function getServerSnapshot(): boolean {
+  return false;
 }
 
 export function ThemeToggle() {
-  // Start with null so SSR and first client render agree (no icon rendered)
-  const [dark, setDark] = useState<boolean | null>(null);
+  const dark = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
-  // After hydration, read the real preference from the client
   useEffect(() => {
-    setDark(getInitialDark());
-  }, []);
+    document.documentElement.classList.toggle("dark", dark);
+  }, [dark]);
 
   const toggle = () => {
     const next = !dark;
-    setDark(next);
     document.documentElement.classList.toggle("dark", next);
     localStorage.setItem("theme", next ? "dark" : "light");
+    themeListeners.forEach((l) => l());
   };
-
-  // Render an invisible placeholder until the client has mounted.
-  // This guarantees server HTML === first client render → no hydration mismatch.
-  if (dark === null) {
-    return (
-      <button
-        className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground"
-        aria-label="Toggle theme"
-        disabled
-      />
-    );
-  }
 
   return (
     <button
