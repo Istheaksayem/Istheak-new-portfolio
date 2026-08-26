@@ -8,7 +8,10 @@ import {
   getMessages,
   listConversations,
   markRead,
+  getConversation,
+  deleteMessage,
 } from "./store";
+import { sendNotificationEmail } from "./mailer";
 
 dotenv.config();
 
@@ -89,8 +92,30 @@ io.on("connection", (socket: Socket) => {
       io.to(`conv:${id}`).emit("message:new", { message: msg });
       io.to("admin").emit("message:new", { message: msg });
       io.to("admin").emit("admin:conversations", { conversations: await listConversations() });
+      
+      // Send email notification
+      const conv = await getConversation(id);
+      if (conv) {
+        await sendNotificationEmail(conv.visitorName, conv.visitorEmail, text);
+      }
     } catch (e) {
       console.error("[chat] visitor:message error", e);
+    }
+  });
+
+  socket.on("visitor:message:delete", async (payload: unknown) => {
+    try {
+      if (socket.data.role !== "visitor" || !socket.data.conversationId) return;
+      const messageId = str((payload as Record<string, unknown>)?.messageId);
+      if (!messageId) return;
+      const id = socket.data.conversationId;
+      const deleted = await deleteMessage(messageId, id);
+      if (deleted) {
+        io.to(`conv:${id}`).emit("message:deleted", { messageId });
+        io.to("admin").emit("message:deleted", { conversationId: id, messageId });
+      }
+    } catch (e) {
+      console.error("[chat] visitor:message:delete error", e);
     }
   });
 

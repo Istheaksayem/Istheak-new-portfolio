@@ -1,4 +1,4 @@
-import { MongoClient, Db } from "mongodb";
+import { MongoClient, Db, ObjectId } from "mongodb";
 import { randomUUID } from "crypto";
 import type { ChatMessage, Conversation } from "./types";
 
@@ -100,6 +100,26 @@ export async function getMessages(conversationId: string): Promise<ChatMessage[]
     createdAt: m.createdAt.toISOString(),
     read: m.read,
   }));
+}
+
+export async function getConversation(conversationId: string): Promise<ConversationDoc | null> {
+  const db = await getDb();
+  return await db.collection<ConversationDoc>("conversations").findOne({ conversationId });
+}
+
+export async function deleteMessage(messageId: string, conversationId: string): Promise<boolean> {
+  const db = await getDb();
+  const col = db.collection<MessageDoc>("messages");
+  try {
+    const result = await col.deleteOne({ 
+      _id: new ObjectId(messageId), 
+      conversationId, 
+      sender: "visitor" 
+    });
+    return result.deletedCount === 1;
+  } catch (e) {
+    return false;
+  }
 }
 
 export async function listConversations(): Promise<Conversation[]> {
