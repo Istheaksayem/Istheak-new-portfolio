@@ -65,7 +65,7 @@ export function Navbar() {
           onClick={() => handleClick("#hero")}
           className="group text-lg font-bold tracking-tight"
         >
-          <span className="bg-gradient-to-r from-primary to-purple-400 bg-clip-text text-transparent transition-all duration-300 group-hover:from-purple-400 group-hover:to-primary">
+          <span className="bg-gradient-to-r from-primary to-emerald-400 bg-clip-text text-transparent transition-all duration-300 group-hover:from-emerald-400 group-hover:to-primary">
             Istheak
           </span>
           <span className="text-primary">.</span>

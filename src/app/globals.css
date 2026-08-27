@@ -32,9 +32,9 @@ html.lenis body {
   --breakpoint-xs: 375px;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-primary: #6C63FF;
+  --color-primary: #4F46E5;
   --color-primary-foreground: #ffffff;
-  --color-secondary: #FF6B6B;
+  --color-secondary: #10B981;
   --color-secondary-foreground: #ffffff;
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
@@ -50,7 +50,7 @@ html.lenis body {
   --color-popover-foreground: var(--popover-foreground);
   --radius: 0.625rem;
   --shadow-soft: 0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04);
-  --shadow-glow: 0 0 20px rgba(108, 99, 255, 0.15);
+  --shadow-glow: 0 0 24px rgba(79, 70, 229, 0.18);
 }
 
 :root {
@@ -60,9 +60,9 @@ html.lenis body {
   --card-foreground: #1a1a2e;
   --popover: #ffffff;
   --popover-foreground: #1a1a2e;
-  --primary: #6c63ff;
+  --primary: #4f46e5;
   --primary-foreground: #ffffff;
-  --secondary: #ff6b6b;
+  --secondary: #10b981;
   --secondary-foreground: #ffffff;
   --muted: #f0f0f5;
   --muted-foreground: #6b7280;
@@ -71,7 +71,7 @@ html.lenis body {
   --destructive: #ef4444;
   --border: #e2e2e8;
   --input: #e2e2e8;
-  --ring: #6c63ff;
+  --ring: #4f46e5;
 }
 
 .dark {
@@ -81,10 +81,10 @@ html.lenis body {
   --card-foreground: #f5f5f5;
   --popover: #14141f;
   --popover-foreground: #f5f5f5;
-  --primary: #8b83ff;
+  --primary: #6366f1;
   --primary-foreground: #ffffff;
-  --secondary: #ff8a8a;
-  --secondary-foreground: #ffffff;
+  --secondary: #34d399;
+  --secondary-foreground: #052e1b;
   --muted: #1a1a2e;
   --muted-foreground: #9ca3af;
   --accent: #1a1a2e;
@@ -92,7 +92,7 @@ html.lenis body {
   --destructive: #f87171;
   --border: #1f1f35;
   --input: #1f1f35;
-  --ring: #8b83ff;
+  --ring: #6366f1;
 }
 
 @layer base {
@@ -209,7 +209,7 @@ html.dark {
 
 @utility text-gradient {
   @apply bg-clip-text text-transparent;
-  background-image: linear-gradient(135deg, var(--primary), #a78bfa, #f472b6);
+  background-image: linear-gradient(135deg, var(--primary), #34d399, #818cf8);
   background-size: 200% 200%;
   animation: gradient-shift 4s ease infinite;
 }

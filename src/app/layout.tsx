@@ -7,7 +7,7 @@ import { LenisProvider } from "@/components/layout/LenisProvider";
 import { CustomCursor } from "@/components/ui/CustomCursor";
 import { NoiseOverlay } from "@/components/ui/NoiseOverlay";
 import { ScrollProgressRing } from "@/components/ui/ScrollProgressRing";
-import { ChatWidget } from "@/components/chat/ChatWidget";
+import { DevTerminal } from "@/components/ui/DevTerminal";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -57,7 +57,7 @@ export default function RootLayout({
           <main className="flex-1">{children}</main>
           <Footer />
         </LenisProvider>
-        <ChatWidget />
+        <DevTerminal />
       </body>
     </html>
   );

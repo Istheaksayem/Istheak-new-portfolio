@@ -137,7 +137,7 @@ export function Experience() {
             <div className="relative mt-12 h-1 overflow-hidden rounded-full bg-border">
               <div
                 ref={progressRef}
-                className="h-full origin-left scale-x-0 rounded-full bg-gradient-to-r from-primary to-purple-400"
+                className="h-full origin-left scale-x-0 rounded-full bg-gradient-to-r from-primary to-emerald-400"
               />
             </div>
 

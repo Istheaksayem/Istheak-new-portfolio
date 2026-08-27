@@ -9,7 +9,7 @@ interface OrbEffectProps {
 }
 
 export function OrbEffect({
-  color = "#6C63FF",
+  color = "#4F46E5",
   count = 15,
   speed = 0.3,
 }: OrbEffectProps) {

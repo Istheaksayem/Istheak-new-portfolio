@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { skillCategories } from "@/data/skills";
+import { skillCategories, techStack } from "@/data/skills";
 import { AnimatedSection } from "@/components/ui/AnimatedSection";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { SkillBadge } from "@/components/ui/SkillBadge";
@@ -70,6 +70,28 @@ export function Skills() {
             </motion.div>
           </AnimatePresence>
         </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.2 }}
+          className="mx-auto mt-12 max-w-3xl"
+        >
+          <p className="mb-4 text-center text-xs font-medium uppercase tracking-widest text-muted-foreground">
+            Core Tech Stack
+          </p>
+          <div className="flex flex-wrap justify-center gap-3">
+            {techStack.map((tech) => (
+              <span
+                key={tech}
+                className="rounded-full border border-border/50 bg-card px-4 py-2 text-sm font-medium text-foreground/80 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/30 hover:text-primary"
+              >
+                {tech}
+              </span>
+            ))}
+          </div>
+        </motion.div>
       </div>
     </AnimatedSection>
   );

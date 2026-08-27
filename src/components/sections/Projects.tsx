@@ -45,12 +45,20 @@ function ProjectModal({
           </button>
 
         <div className="relative mb-6 aspect-video overflow-hidden rounded-xl bg-muted">
-          <Image
-            src={project.image}
-            alt={project.title}
-            fill
-            className="object-cover"
-          />
+          {project.image ? (
+            <Image
+              src={project.image}
+              alt={project.title}
+              fill
+              className="object-cover"
+            />
+          ) : (
+            <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-primary/20 via-card to-secondary/20">
+              <span className="text-4xl font-bold text-primary/70">
+                {project.title.charAt(0)}
+              </span>
+            </div>
+          )}
         </div>
 
         <h2 className="mb-2 text-2xl font-bold">{project.title}</h2>
@@ -126,18 +134,26 @@ function ProjectCard({
         spotlightColor="rgba(108, 99, 255, 0.06)"
       >
         <button onClick={onClick} className="flex h-full w-full flex-col text-left">
-          <div
-            className={`relative overflow-hidden bg-muted ${
-              featured ? "aspect-[2/1]" : "aspect-video"
-            }`}
-          >
-            <Image
-              src={project.image}
-              alt={project.title}
-              fill
-              className="object-cover transition-transform duration-500 group-hover:scale-110"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-card/60 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+            <div
+              className={`relative overflow-hidden bg-muted ${
+                featured ? "aspect-[2/1]" : "aspect-video"
+              }`}
+            >
+              {project.image ? (
+                <Image
+                  src={project.image}
+                  alt={project.title}
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+              ) : (
+                <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-primary/20 via-card to-secondary/20">
+                  <span className="text-5xl font-bold text-primary/70">
+                    {project.title.charAt(0)}
+                  </span>
+                </div>
+              )}
+              <div className="absolute inset-0 bg-gradient-to-t from-card/60 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
           </div>
           <div className="flex flex-1 flex-col gap-3 p-6">
             <div className="flex items-center justify-between">

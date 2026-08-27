@@ -27,7 +27,7 @@ export function SkillBadge({ name, level, index }: SkillBadgeProps) {
           whileInView={{ width: `${level}%` }}
           viewport={{ once: true }}
           transition={{ duration: 1, delay: index * 0.08 + 0.2, ease: "easeOut" }}
-          className="h-full rounded-full bg-gradient-to-r from-primary to-purple-400"
+          className="h-full rounded-full bg-gradient-to-r from-primary to-emerald-400"
         />
       </div>
     </motion.div>
