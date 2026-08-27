@@ -19,13 +19,13 @@ export function Skills() {
           description="A comprehensive toolkit I've built over years of hands-on development."
         />
 
-        <div className="mb-10 flex justify-center overflow-x-auto scrollbar-none">
+        <div className="mb-10 flex justify-start md:justify-center overflow-x-auto scrollbar-none py-2">
           <div className="inline-flex flex-shrink-0 rounded-full border border-border/50 bg-card p-1 shadow-sm">
             {skillCategories.map((cat, i) => (
               <button
                 key={cat.title}
                 onClick={() => setActiveTab(i)}
-                className={`relative rounded-full px-5 py-2 text-sm font-medium transition-colors ${
+                className={`relative rounded-full px-4 md:px-5 py-2 text-sm font-medium whitespace-nowrap transition-colors ${
                   activeTab === i
                     ? "text-primary-foreground"
                     : "text-muted-foreground hover:text-foreground"
@@ -51,7 +51,7 @@ export function Skills() {
               animate={{ opacity: 1, rotateX: 0, y: 0 }}
               exit={{ opacity: 0, rotateX: 10, y: -20 }}
               transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="mx-auto max-w-2xl rounded-2xl border border-border/50 bg-card p-8 shadow-sm"
+              className="mx-auto max-w-2xl rounded-2xl border border-border/50 bg-card p-5 sm:p-8 shadow-sm"
               style={{ transformStyle: "preserve-3d" }}
             >
               <h3 className="mb-8 text-center text-lg font-semibold">

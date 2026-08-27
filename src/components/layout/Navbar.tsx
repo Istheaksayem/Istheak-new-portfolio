@@ -51,14 +51,14 @@ export function Navbar() {
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "border-b border-border/40 bg-background/80 shadow-sm backdrop-blur-xl"
+        scrolled || mobileOpen
+          ? "border-b border-border/40 bg-background shadow-sm backdrop-blur-xl"
           : "bg-transparent"
       }`}
     >
       <nav
         className={`mx-auto flex items-center justify-between px-6 transition-all duration-300 ${
-          scrolled ? "h-14" : "h-16"
+          scrolled || mobileOpen ? "h-14" : "h-16"
         } max-w-6xl`}
       >
         <button
@@ -127,7 +127,7 @@ export function Navbar() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 top-14 z-40 flex flex-col items-center justify-center gap-8 bg-background/95 backdrop-blur-xl px-6"
+            className="fixed inset-0 top-14 z-40 flex flex-col items-center justify-center gap-8 bg-background px-6"
           >
             {navLinks.map((link, i) => (
               <motion.button
