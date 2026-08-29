@@ -3,10 +3,12 @@
 import { motion } from "motion/react";
 import { profile } from "@/data/profile";
 import { AnimatedCounter } from "@/components/ui/AnimatedCounter";
+import { SectionBackground } from "@/components/ui/SectionBackground";
 
 export function Stats() {
   return (
-    <section className="border-y border-border/40 bg-muted/30 section-padding">
+    <section className="relative overflow-hidden border-y border-border/40 bg-muted/30 section-padding">
+      <SectionBackground variant="stats" />
       <div className="container-fluid mx-auto">
         <div className="grid grid-cols-2 gap-y-10 lg:grid-cols-4">
           {profile.stats.map((stat, i) => (

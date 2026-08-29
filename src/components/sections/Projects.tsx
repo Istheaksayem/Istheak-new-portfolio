@@ -8,6 +8,7 @@ import { useGSAP } from "@gsap/react";
 import { projects, type Project } from "@/data/projects";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { BrowserMockup } from "@/components/ui/BrowserMockup";
+import { SectionBackground } from "@/components/ui/SectionBackground";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -77,7 +78,8 @@ export function Projects() {
   );
 
   return (
-    <section id="projects" className="section-padding">
+    <section id="projects" className="relative overflow-hidden section-padding">
+      <SectionBackground variant="projects" />
       <div ref={rootRef} className="container-fluid mx-auto max-w-6xl">
         <SectionHeading
           label="Selected Work"

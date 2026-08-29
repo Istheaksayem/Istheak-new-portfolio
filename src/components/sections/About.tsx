@@ -4,6 +4,7 @@ import { useRef } from "react";
 import Image from "next/image";
 import { motion, useInView } from "motion/react";
 import { profile } from "@/data/profile";
+import { SectionBackground } from "@/components/ui/SectionBackground";
 
 const TIMELINE = [
   { year: "2024", label: "Started Coding" },
@@ -16,7 +17,8 @@ export function About() {
   const imageInView = useInView(imageRef, { once: true });
 
   return (
-    <section id="about" className="section-padding">
+    <section id="about" className="relative overflow-hidden section-padding">
+      <SectionBackground variant="about" />
       <div className="container-fluid mx-auto max-w-6xl">
         <motion.span
           initial={{ opacity: 0, y: 10 }}

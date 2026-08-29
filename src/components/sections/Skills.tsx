@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { techStack } from "@/data/skills";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { SectionBackground } from "@/components/ui/SectionBackground";
 
 const ICON_MAP: Record<string, LucideIcon> = {
   HTML: Code2,
@@ -75,7 +76,8 @@ export function Skills() {
   const rowB = techStack.slice(mid);
 
   return (
-    <section id="skills" className="bg-muted/30 section-padding">
+    <section id="skills" className="relative overflow-hidden bg-muted/30 section-padding">
+      <SectionBackground variant="skills" />
       <div className="container-fluid mx-auto max-w-6xl">
         <SectionHeading
           label="Tech Stack"

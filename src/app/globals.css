@@ -59,9 +59,9 @@ html.lenis body {
   --shadow-glow-emerald: 0 0 30px rgba(16, 185, 129, 0.2);
 }
 
-/* ─── Light theme (kept, but dark is the default) ─────────────────────── */
+/* ─── Light theme (refined "studio" equivalent, not an inversion) ─────── */
 :root {
-  --background: #fafafa;
+  --background: #f1f3fb;
   --foreground: #14141b;
   --card: #ffffff;
   --card-foreground: #14141b;
@@ -71,38 +71,52 @@ html.lenis body {
   --primary-foreground: #ffffff;
   --secondary: #059669;
   --secondary-foreground: #ffffff;
-  --muted: #f0f0f5;
-  --muted-foreground: #6b7280;
-  --accent: #f0f0f5;
+  --muted: #e9ebf4;
+  --muted-foreground: #5b6270;
+  --accent: #eef0f8;
   --accent-foreground: #14141b;
   --destructive: #ef4444;
-  --border: #e6e6ee;
-  --input: #e6e6ee;
+  --border: #dde0ec;
+  --input: #dde0ec;
   --ring: #6366f1;
-  --grid-line: rgba(0, 0, 0, 0.05);
+
+  /* Aurora system — light (soft, low-alpha tints) */
+  --grid-color: rgba(15, 23, 42, 0.05);
+  --aurora-indigo: rgba(79, 70, 229, 0.16);
+  --aurora-indigo-soft: rgba(99, 102, 241, 0.08);
+  --aurora-emerald: rgba(5, 150, 105, 0.16);
+  --aurora-emerald-soft: rgba(16, 185, 129, 0.09);
+  --bg-deep: #e7eaf5;
 }
 
-/* ─── Dark theme (premium identity) ───────────────────────────────────── */
+/* ─── Dark theme (premium Midnight Indigo identity) ────────────────────── */
 .dark {
-  --background: #050505;
+  --background: #070914;
   --foreground: #f5f5f5;
-  --card: #0d0d0d;
+  --card: #0c0e1a;
   --card-foreground: #f5f5f5;
-  --popover: #0d0d0d;
+  --popover: #0c0e1a;
   --popover-foreground: #f5f5f5;
   --primary: #6366f1;
   --primary-foreground: #ffffff;
   --secondary: #10b981;
   --secondary-foreground: #052e1b;
-  --muted: #111111;
+  --muted: #0d1020;
   --muted-foreground: #8a8a93;
-  --accent: #141417;
+  --accent: #11142a;
   --accent-foreground: #f5f5f5;
   --destructive: #f87171;
-  --border: #1c1c22;
-  --input: #1c1c22;
+  --border: #1c2036;
+  --input: #1c2036;
   --ring: #6366f1;
-  --grid-line: rgba(255, 255, 255, 0.045);
+
+  /* Aurora system — dark (indigo #6366F1 + emerald #10B981) */
+  --grid-color: rgba(255, 255, 255, 0.045);
+  --aurora-indigo: rgba(99, 102, 241, 0.22);
+  --aurora-indigo-soft: rgba(99, 102, 241, 0.10);
+  --aurora-emerald: rgba(16, 185, 129, 0.16);
+  --aurora-emerald-soft: rgba(16, 185, 129, 0.09);
+  --bg-deep: #050810;
 }
 
 @layer base {
@@ -156,12 +170,47 @@ html.dark {
   border: 1px solid color-mix(in oklab, var(--border) 80%, transparent);
 }
 
-/* Fine tech grid background */
+/* Fine tech grid background (legacy) */
 @utility bg-grid {
   background-image:
     linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
     linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
   background-size: 56px 56px;
+}
+
+/* Aurora fine grid — uses per-theme --grid-color */
+@utility aurora-grid {
+  background-image:
+    linear-gradient(to right, var(--grid-color) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-color) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+/* Slow, very subtle ambient drift for aurora blobs */
+@keyframes aurora-drift-a {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(3%, -4%, 0) scale(1.08); }
+}
+@keyframes aurora-drift-b {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(-4%, 3%, 0) scale(1.1); }
+}
+@keyframes aurora-drift-c {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(2%, 5%, 0) scale(1.05); }
+}
+
+@utility aurora-anim-a {
+  animation: aurora-drift-a 32s ease-in-out infinite;
+  will-change: transform;
+}
+@utility aurora-anim-b {
+  animation: aurora-drift-b 40s ease-in-out infinite;
+  will-change: transform;
+}
+@utility aurora-anim-c {
+  animation: aurora-drift-c 46s ease-in-out infinite;
+  will-change: transform;
 }
 
 /* Radial glow used behind hero / sections */

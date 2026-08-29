@@ -3,10 +3,12 @@
 import { motion } from "motion/react";
 import { whyWorkWithMe } from "@/data/whyWorkWithMe";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { SectionBackground } from "@/components/ui/SectionBackground";
 
 export function WhyWorkWithMe() {
   return (
-    <section id="why" className="section-padding">
+    <section id="why" className="relative overflow-hidden section-padding">
+      <SectionBackground variant="why" />
       <div className="container-fluid mx-auto max-w-5xl">
         <SectionHeading
           label="Why Istheak?"

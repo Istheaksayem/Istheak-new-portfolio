@@ -4,10 +4,15 @@ import { motion } from "motion/react";
 import { education } from "@/data/education";
 import { AnimatedSection } from "@/components/ui/AnimatedSection";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { SectionBackground } from "@/components/ui/SectionBackground";
 
 export function Education() {
   return (
-    <AnimatedSection id="education" className="px-6 py-24 sm:py-32">
+    <AnimatedSection
+      id="education"
+      className="relative overflow-hidden px-6 py-24 sm:py-32"
+    >
+      <SectionBackground variant="education" />
       <div className="mx-auto max-w-4xl">
         <SectionHeading
           label="Education"

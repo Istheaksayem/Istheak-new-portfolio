@@ -4,6 +4,7 @@ import { useState, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { AnimatedSection } from "@/components/ui/AnimatedSection";
 import { MagneticButton } from "@/components/ui/MagneticButton";
+import { SectionBackground } from "@/components/ui/SectionBackground";
 import { profile } from "@/data/profile";
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
@@ -237,7 +238,11 @@ export function Contact() {
   // ── Render ─────────────────────────────────────────────────────────────────
 
   return (
-    <AnimatedSection id="contact" className="bg-muted/30 px-6 py-24 sm:py-32">
+    <AnimatedSection
+      id="contact"
+      className="relative overflow-hidden bg-muted/30 px-6 py-24 sm:py-32"
+    >
+      <SectionBackground variant="contact" />
       <div className="mx-auto max-w-6xl">
         <div className="mb-16 max-w-3xl">
           <motion.span

@@ -6,8 +6,10 @@ import {
   motion,
   useMotionValue,
   useSpring,
+  useTransform,
 } from "motion/react";
 import { profile } from "@/data/profile";
+import { SectionBackground } from "@/components/ui/SectionBackground";
 
 const HEADLINE = ["BUILDING", "DIGITAL", "EXPERIENCES."];
 
@@ -19,6 +21,27 @@ export function Hero() {
   // 3D tilt for the developer card
   const rotX = useSpring(useMotionValue(0), { stiffness: 150, damping: 18 });
   const rotY = useSpring(useMotionValue(0), { stiffness: 150, damping: 18 });
+
+  // Smooth mouse-following ambient glow (Motion springs — only tick on change)
+  const mx = useSpring(useMotionValue(50), {
+    stiffness: 55,
+    damping: 20,
+    restDelta: 0.01,
+  });
+  const my = useSpring(useMotionValue(28), {
+    stiffness: 55,
+    damping: 20,
+    restDelta: 0.01,
+  });
+  const mxPct = useTransform(mx, (v) => `${v}%`);
+  const myPct = useTransform(my, (v) => `${v}%`);
+
+  const onSectionMove = (e: React.MouseEvent) => {
+    const r = sectionRef.current?.getBoundingClientRect();
+    if (!r) return;
+    mx.set(((e.clientX - r.left) / r.width) * 100);
+    my.set(((e.clientY - r.top) / r.height) * 100);
+  };
 
   const onCardMove = (e: React.MouseEvent) => {
     const el = cardRef.current;
@@ -48,38 +71,23 @@ export function Hero() {
     <section
       ref={sectionRef}
       id="hero"
+      onMouseMove={onSectionMove}
       className="relative flex min-h-screen items-center overflow-hidden pt-28 pb-16 sm:pt-24"
     >
       {/* ── Interactive background ── */}
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-grid [mask-image:radial-gradient(ellipse_at_center,black,transparent_75%)]" />
-      <motion.div
-        aria-hidden
-        className="pointer-events-none absolute -top-40 left-1/2 -z-10 h-[640px] w-[640px] -translate-x-1/2 rounded-full radial-glow opacity-70 blur-3xl"
-        style={{ "--glow-color": "rgba(99,102,241,0.22)" } as React.CSSProperties}
-      />
-      <motion.div
-        aria-hidden
-        className="pointer-events-none absolute bottom-0 right-0 -z-10 h-[480px] w-[480px] rounded-full radial-glow opacity-50 blur-3xl"
-        style={{ "--glow-color": "rgba(16,185,129,0.16)" } as React.CSSProperties}
-      />
+      <SectionBackground variant="hero" />
       {/* mouse-following glow */}
-      <div
+      <motion.div
         aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 opacity-60"
-        style={{
-          background:
-            "radial-gradient(400px circle at var(--mx,50%) var(--my,30%), rgba(99,102,241,0.10), transparent 60%)",
-        }}
-        onMouseMove={(e) => {
-          const r = sectionRef.current?.getBoundingClientRect();
-          if (!r) return;
-          (
-            e.currentTarget as HTMLElement
-          ).style.setProperty("--mx", `${e.clientX - r.left}px`);
-          (
-            e.currentTarget as HTMLElement
-          ).style.setProperty("--my", `${e.clientY - r.top}px`);
-        }}
+        className="pointer-events-none absolute inset-0 -z-10"
+        style={
+          {
+            "--mx": mxPct,
+            "--my": myPct,
+            background:
+              "radial-gradient(420px circle at var(--mx) var(--my), var(--aurora-indigo-soft), transparent 60%)",
+          } as unknown as React.CSSProperties
+        }
       />
 
       <div className="container-fluid mx-auto grid w-full items-center gap-12 lg:grid-cols-[1.15fr_0.85fr]">

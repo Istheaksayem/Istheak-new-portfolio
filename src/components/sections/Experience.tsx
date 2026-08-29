@@ -7,6 +7,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { experiences } from "@/data/experience";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { SectionBackground } from "@/components/ui/SectionBackground";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -37,7 +38,8 @@ export function Experience() {
   );
 
   return (
-    <section id="experience" className="bg-muted/30 section-padding">
+    <section id="experience" className="relative overflow-hidden bg-muted/30 section-padding">
+      <SectionBackground variant="experience" />
       <div ref={rootRef} className="container-fluid mx-auto max-w-4xl">
         <SectionHeading
           label="Experience"

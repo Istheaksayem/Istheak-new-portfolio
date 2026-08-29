@@ -3,10 +3,12 @@
 import { motion } from "motion/react";
 import { services } from "@/data/services";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { SectionBackground } from "@/components/ui/SectionBackground";
 
 export function Services() {
   return (
-    <section id="services" className="bg-muted/30 section-padding">
+    <section id="services" className="relative overflow-hidden bg-muted/30 section-padding">
+      <SectionBackground variant="services" />
       <div className="container-fluid mx-auto max-w-5xl">
         <SectionHeading
           label="What I Build"
