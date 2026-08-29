@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
+import { useRef } from "react";
 import { motion } from "motion/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -11,200 +11,100 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 gsap.registerPlugin(ScrollTrigger);
 
 export function Experience() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const trackRef = useRef<HTMLDivElement>(null);
-  const progressRef = useRef<HTMLDivElement>(null);
-  const [isDesktop, setIsDesktop] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const lineRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const check = () => setIsDesktop(window.innerWidth >= 1024);
-    check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
-  }, []);
-
-  useGSAP(() => {
-    if (!isDesktop) return;
-    const section = sectionRef.current;
-    const track = trackRef.current;
-    const progress = progressRef.current;
-    if (!section || !track || !progress) return;
-
-    const cards = track.querySelectorAll(".exp-card");
-    if (cards.length === 0) return;
-    const cardWidth = (cards[0] as HTMLElement)?.offsetWidth || 480;
-    const gap = 48;
-    const totalWidth = (cardWidth + gap) * experiences.length - gap;
-    const offset = Math.max(0, totalWidth - window.innerWidth + 160);
-
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: section,
-        start: "top top",
-        end: `+=${experiences.length * 120}%`,
-        pin: true,
-        scrub: 1.5,
-        anticipatePin: 1,
-        invalidateOnRefresh: true,
-      },
-    });
-
-    tl.to(track, {
-      x: -offset,
-      ease: "none",
-    });
-
-    tl.to(
-      progress,
-      {
-        scaleX: 1,
-        ease: "none",
-      },
-      0,
-    );
-
-    return () => {
-      ScrollTrigger.getAll().forEach((st) => st.kill());
-    };
-  }, [isDesktop]);
+  useGSAP(
+    () => {
+      if (lineRef.current) {
+        gsap.fromTo(
+          lineRef.current,
+          { scaleY: 0 },
+          {
+            scaleY: 1,
+            ease: "none",
+            scrollTrigger: {
+              trigger: rootRef.current,
+              start: "top 60%",
+              end: "bottom 80%",
+              scrub: true,
+            },
+          },
+        );
+      }
+    },
+    { scope: rootRef },
+  );
 
   return (
-    <section
-      id="experience"
-      ref={sectionRef}
-      className="relative overflow-hidden bg-muted/30"
-    >
-      <div className={`mx-auto flex flex-col justify-center px-6 py-24 sm:py-32 ${isDesktop ? "min-h-screen" : ""}`}>
+    <section id="experience" className="bg-muted/30 section-padding">
+      <div ref={rootRef} className="container-fluid mx-auto max-w-4xl">
         <SectionHeading
           label="Experience"
-          title="Where I've Worked"
-          description="My professional journey in software engineering."
+          title="My Journey"
+          description="The path I've walked — from first lines of code to shipping real products."
         />
 
-        {isDesktop ? (
-          <>
-            <div
-              ref={trackRef}
-              className="mt-12 flex gap-12 will-change-transform"
-              style={{ minWidth: "max-content" }}
-            >
-              {experiences.map((exp) => (
-                <div
-                  key={`${exp.company}-${exp.period}`}
-                  className="exp-card w-[calc(100vw-4rem)] max-w-[480px] flex-shrink-0"
-                >
-                  <div className="flex h-full flex-col rounded-2xl border border-border/50 bg-card p-8 shadow-sm transition-all duration-500 hover:shadow-soft hover:border-primary/20">
-                    <div className="mb-2 flex items-center gap-3">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-sm font-bold text-primary">
-                        {exp.company.charAt(0)}
-                      </div>
-                      <div>
-                        <span className="text-xs font-medium text-primary">
-                          {exp.period}
-                        </span>
-                      </div>
-                    </div>
+        <div className="relative mt-4 pl-8 sm:pl-12">
+          {/* Track */}
+          <div className="absolute left-[15px] top-2 bottom-2 w-px bg-border sm:left-[23px]" />
+          {/* Animated draw line */}
+          <div
+            ref={lineRef}
+            className="absolute left-[15px] top-2 bottom-2 w-px origin-top bg-gradient-to-b from-primary to-secondary sm:left-[23px]"
+            style={{ transform: "scaleY(0)" }}
+          />
 
-                    <h3 className="text-xl font-semibold">{exp.role}</h3>
-                    <p className="mb-4 text-sm text-muted-foreground">
-                      {exp.company} &mdash; {exp.location}
-                    </p>
-
-                    <p className="mb-6 flex-1 text-sm text-muted-foreground leading-relaxed">
-                      {exp.description}
-                    </p>
-
-                    <ul className="space-y-2">
-                      {exp.highlights.map((h, i) => (
-                        <motion.li
-                          key={i}
-                          initial={{ opacity: 0, x: -10 }}
-                          whileInView={{ opacity: 1, x: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ delay: 0.2 + i * 0.1 }}
-                          className="flex items-start gap-2 text-sm text-muted-foreground"
-                        >
-                          <span className="mt-1.5 h-1 w-1 flex-shrink-0 rounded-full bg-primary" />
-                          {h}
-                        </motion.li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="relative mt-12 h-1 overflow-hidden rounded-full bg-border">
-              <div
-                ref={progressRef}
-                className="h-full origin-left scale-x-0 rounded-full bg-gradient-to-r from-primary to-emerald-400"
-              />
-            </div>
-
-            <div className="mt-4 text-center text-xs text-muted-foreground">
-              Scroll to explore my journey &rarr;
-            </div>
-          </>
-        ) : (
-          <div className="mt-12 space-y-8">
-            {experiences.map((exp, index) => (
+          <div className="space-y-12">
+            {experiences.map((exp, i) => (
               <motion.div
                 key={`${exp.company}-${exp.period}`}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 0.6, delay: i * 0.05 }}
+                className="relative"
               >
-                <div className="flex flex-col rounded-2xl border border-border/50 bg-card p-6 shadow-sm transition-all duration-500 hover:shadow-soft hover:border-primary/20 sm:p-8">
-                  <div className="mb-2 flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-sm font-bold text-primary">
-                      {exp.company.charAt(0)}
-                    </div>
-                    <div>
-                      <span className="text-xs font-medium text-primary">
-                        {exp.period}
-                      </span>
-                    </div>
+                {/* Dot */}
+                <span className="absolute -left-[31px] top-2 flex h-4 w-4 items-center justify-center rounded-full bg-background ring-2 ring-primary sm:-left-[39px]">
+                  <span className="h-2 w-2 rounded-full bg-primary shadow-glow" />
+                </span>
+
+                <div className="rounded-2xl border border-border/50 bg-card p-6 shadow-sm transition-all duration-300 hover:border-primary/30 hover:shadow-soft sm:p-7">
+                  <div className="mb-3 flex flex-wrap items-center gap-3">
+                    <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+                      {exp.period}
+                    </span>
+                    <span className="text-xs text-muted-foreground">
+                      {exp.location}
+                    </span>
                   </div>
-
-                  <h3 className="text-lg font-semibold sm:text-xl">{exp.role}</h3>
-                  <p className="mb-4 text-sm text-muted-foreground">
-                    {exp.company} &mdash; {exp.location}
+                  <h3 className="font-display text-xl font-semibold sm:text-2xl">
+                    {exp.role}
+                  </h3>
+                  <p className="mb-3 text-sm font-medium text-foreground/80">
+                    {exp.company}
                   </p>
-
-                  <p className="mb-6 text-sm text-muted-foreground leading-relaxed">
+                  <p className="mb-5 text-sm leading-relaxed text-muted-foreground">
                     {exp.description}
                   </p>
-
                   <ul className="space-y-2">
-                    {exp.highlights.map((h, i) => (
-                      <motion.li
-                        key={i}
-                        initial={{ opacity: 0, x: -10 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: 0.2 + i * 0.1 }}
+                    {exp.highlights.map((h, hi) => (
+                      <li
+                        key={hi}
                         className="flex items-start gap-2 text-sm text-muted-foreground"
                       >
-                        <span className="mt-1.5 h-1 w-1 flex-shrink-0 rounded-full bg-primary" />
+                        <span className="mt-1.5 h-1 w-1 flex-shrink-0 rounded-full bg-secondary" />
                         {h}
-                      </motion.li>
+                      </li>
                     ))}
                   </ul>
                 </div>
               </motion.div>
             ))}
           </div>
-        )}
-
-        {!isDesktop && (
-          <div className="mt-10 border-t border-border/30 pt-6 text-center text-xs text-muted-foreground">
-            End of journey
-          </div>
-        )}
+        </div>
       </div>
-
-      <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-muted/30 to-transparent" />
     </section>
   );
 }

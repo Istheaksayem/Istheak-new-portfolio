@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -7,10 +7,18 @@ import { LenisProvider } from "@/components/layout/LenisProvider";
 import { CustomCursor } from "@/components/ui/CustomCursor";
 import { NoiseOverlay } from "@/components/ui/NoiseOverlay";
 import { ScrollProgressRing } from "@/components/ui/ScrollProgressRing";
+import { Loader } from "@/components/ui/Loader";
 import { DevTerminal } from "@/components/ui/DevTerminal";
+import { ChatWidget } from "@/components/chat/ChatWidget";
 
 const inter = Inter({
   variable: "--font-inter",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
   subsets: ["latin"],
   display: "swap",
 });
@@ -27,13 +35,13 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Istheak Ahmed | MERN Stack Developer",
+  title: "Istheak Ahmed | Full-Stack Developer",
   description:
-    "MERN Stack Developer specializing in scalable web applications with React, Next.js, Node.js, MongoDB, and real-time features.",
+    "Istheak Ahmed Sayem — Full-Stack / MERN Stack Developer building modern, scalable and engaging web experiences with Next.js, React, Node.js and MongoDB.",
   openGraph: {
-    title: "Istheak Ahmed | MERN Stack Developer",
+    title: "Istheak Ahmed | Full-Stack Developer",
     description:
-      "MERN Stack Developer specializing in scalable web applications with React, Next.js, Node.js, MongoDB, and real-time features.",
+      "Full-Stack / MERN Stack Developer building modern, scalable and engaging web experiences.",
   },
 };
 
@@ -45,10 +53,11 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${jetbrainsMono.variable}`}
+      className={`dark ${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`}
       suppressHydrationWarning
     >
       <body className="min-h-full bg-background font-sans text-foreground antialiased">
+        <Loader />
         <CustomCursor />
         <NoiseOverlay />
         <ScrollProgressRing />
@@ -58,6 +67,7 @@ export default function RootLayout({
           <Footer />
         </LenisProvider>
         <DevTerminal />
+        <ChatWidget />
       </body>
     </html>
   );

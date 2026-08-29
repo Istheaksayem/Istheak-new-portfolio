@@ -3,7 +3,6 @@
 import { useState, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { AnimatedSection } from "@/components/ui/AnimatedSection";
-import { SectionHeading } from "@/components/ui/SectionHeading";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 import { profile } from "@/data/profile";
 
@@ -240,11 +239,45 @@ export function Contact() {
   return (
     <AnimatedSection id="contact" className="bg-muted/30 px-6 py-24 sm:py-32">
       <div className="mx-auto max-w-6xl">
-        <SectionHeading
-          label="Contact"
-          title="Let's Work Together"
-          description="Have a project in mind? I'd love to hear about it. Drop me a message and I'll get back to you."
-        />
+        <div className="mb-16 max-w-3xl">
+          <motion.span
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mb-4 inline-block text-sm font-medium uppercase tracking-widest text-primary"
+          >
+            Contact
+          </motion.span>
+          <h2 className="font-display text-4xl font-bold leading-[1.02] tracking-tight sm:text-5xl lg:text-6xl">
+            <motion.span
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="block"
+            >
+              HAVE AN IDEA?
+            </motion.span>
+            <motion.span
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.08 }}
+              className="block text-gradient"
+            >
+              LET&apos;S BUILD IT.
+            </motion.span>
+          </h2>
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="mt-5 text-lg text-muted-foreground"
+          >
+            Tell me about your project — I&apos;ll get back to you as soon as possible.
+          </motion.p>
+        </div>
 
         <div className="grid gap-12 lg:grid-cols-5 lg:gap-16">
           <motion.form

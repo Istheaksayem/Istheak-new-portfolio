@@ -1,6 +1,7 @@
 "use client";
 
 import { useScroll, useSpring, motion } from "motion/react";
+import type Lenis from "lenis";
 
 export function ScrollProgressRing() {
   const { scrollYProgress } = useScroll();
@@ -17,8 +18,12 @@ export function ScrollProgressRing() {
       initial={{ opacity: 0, scale: 0 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ delay: 2 }}
-      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-      className="fixed bottom-6 right-6 z-50 hidden h-12 w-12 items-center justify-center rounded-full bg-background/80 shadow-soft backdrop-blur-md md:flex"
+      onClick={() => {
+        const lenis = (window as unknown as { lenis?: Lenis }).lenis;
+        if (lenis) lenis.scrollTo(0);
+        else window.scrollTo({ top: 0, behavior: "smooth" });
+      }}
+      className="fixed bottom-24 right-6 z-50 hidden h-12 w-12 items-center justify-center rounded-full bg-background/80 shadow-soft backdrop-blur-md md:flex"
       aria-label="Scroll to top"
     >
       <svg className="h-12 w-12 -rotate-90" viewBox="0 0 48 48">

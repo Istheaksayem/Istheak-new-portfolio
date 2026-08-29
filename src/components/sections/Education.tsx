@@ -11,8 +11,8 @@ export function Education() {
       <div className="mx-auto max-w-4xl">
         <SectionHeading
           label="Education"
-          title="My Academic Background"
-          description="The foundation that shaped my analytical mindset alongside my coding journey."
+          title="Where It Started"
+          description="The academic foundation that shaped my analytical mindset alongside my coding journey."
         />
 
         <div className="relative">

@@ -11,14 +11,14 @@ function subscribe(cb: () => void) {
 }
 
 function getSnapshot(): boolean {
-  if (typeof window === "undefined") return false;
+  if (typeof window === "undefined") return true;
   const stored = localStorage.getItem("theme");
-  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-  return stored === "dark" || (!stored && prefersDark);
+  // Default to dark (premium identity). Only leave dark if explicitly "light".
+  return stored ? stored === "dark" : true;
 }
 
 function getServerSnapshot(): boolean {
-  return false;
+  return true;
 }
 
 export function ThemeToggle() {

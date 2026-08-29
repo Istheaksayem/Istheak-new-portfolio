@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
+import type Lenis from "lenis";
 import { navLinks } from "@/data/navigation";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
@@ -11,7 +12,8 @@ export function Navbar() {
   const [activeSection, setActiveSection] = useState("#hero");
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 50);
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -22,7 +24,9 @@ export function Navbar() {
     } else {
       document.body.style.overflow = "";
     }
-    return () => { document.body.style.overflow = ""; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [mobileOpen]);
 
   useEffect(() => {
@@ -34,7 +38,7 @@ export function Navbar() {
         ([entry]) => {
           if (entry.isIntersecting) setActiveSection(link.href);
         },
-        { threshold: 0.3, rootMargin: "-80px 0px 0px 0px" },
+        { threshold: 0.4, rootMargin: "-40% 0px -55% 0px" },
       );
       observer.observe(el);
       observers.push(observer);
@@ -45,27 +49,33 @@ export function Navbar() {
   const handleClick = (href: string) => {
     setMobileOpen(false);
     const el = document.querySelector(href);
-    el?.scrollIntoView({ behavior: "smooth" });
+    if (!el) return;
+    const lenis = (window as unknown as { lenis?: Lenis }).lenis;
+    if (lenis) {
+      lenis.scrollTo(el as HTMLElement, { offset: -80 });
+    } else {
+      el.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   return (
-    <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
-        scrolled || mobileOpen
-          ? "border-b border-border/40 bg-background shadow-sm backdrop-blur-xl"
-          : "bg-transparent"
-      }`}
-    >
-      <nav
-        className={`mx-auto flex items-center justify-between px-6 transition-all duration-300 ${
-          scrolled || mobileOpen ? "h-14" : "h-16"
-        } max-w-6xl`}
+    <header className="fixed inset-x-0 top-3 z-50 flex justify-center px-4 sm:top-4">
+      <motion.nav
+        initial={{ y: -24, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+        className={`glass flex w-full max-w-3xl items-center justify-between rounded-full px-3 py-2 transition-all duration-300 sm:px-4 ${
+          scrolled
+            ? "shadow-glow"
+            : ""
+        }`}
       >
         <button
           onClick={() => handleClick("#hero")}
-          className="group text-lg font-bold tracking-tight"
+          className="group flex items-center text-base font-bold tracking-tight sm:text-lg"
+          aria-label="Go to top"
         >
-          <span className="bg-gradient-to-r from-primary to-emerald-400 bg-clip-text text-transparent transition-all duration-300 group-hover:from-emerald-400 group-hover:to-primary">
+          <span className="bg-gradient-to-r from-foreground to-foreground bg-clip-text text-transparent transition-all duration-300 group-hover:from-primary group-hover:to-secondary">
             Istheak
           </span>
           <span className="text-primary">.</span>
@@ -76,7 +86,7 @@ export function Navbar() {
             <button
               key={link.href}
               onClick={() => handleClick(link.href)}
-              className={`relative rounded-lg px-3 py-2 text-sm transition-colors ${
+              className={`relative rounded-full px-3 py-2 text-sm transition-colors ${
                 activeSection === link.href
                   ? "text-foreground"
                   : "text-muted-foreground hover:text-foreground"
@@ -86,22 +96,23 @@ export function Navbar() {
               {activeSection === link.href && (
                 <motion.span
                   layoutId="nav-underline"
-                  className="absolute bottom-0 left-2 right-2 h-0.5 rounded-full bg-primary"
+                  className="absolute inset-x-3 -bottom-0.5 h-px rounded-full bg-gradient-to-r from-primary to-secondary"
                 />
               )}
             </button>
           ))}
-          <div className="ml-2 pl-2 border-l border-border">
+          <div className="ml-1 border-l border-border pl-2">
             <ThemeToggle />
           </div>
         </div>
 
-        <div className="flex items-center gap-2 md:hidden">
+        <div className="flex items-center gap-1 md:hidden">
           <ThemeToggle />
           <button
-            onClick={() => setMobileOpen(!mobileOpen)}
-            className="flex h-9 w-9 items-center justify-center rounded-lg"
+            onClick={() => setMobileOpen((o) => !o)}
+            className="flex h-9 w-9 items-center justify-center rounded-full"
             aria-label="Toggle menu"
+            aria-expanded={mobileOpen}
           >
             <div className="flex flex-col gap-1.5">
               <motion.span
@@ -119,26 +130,28 @@ export function Navbar() {
             </div>
           </button>
         </div>
-      </nav>
+      </motion.nav>
 
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 top-14 z-40 flex flex-col items-center justify-center gap-8 bg-background px-6"
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.25 }}
+            className="glass absolute top-16 left-4 right-4 flex flex-col gap-1 rounded-2xl p-3 sm:left-auto sm:right-4 sm:w-64"
           >
             {navLinks.map((link, i) => (
               <motion.button
                 key={link.href}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ delay: i * 0.06 }}
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: i * 0.04 }}
                 onClick={() => handleClick(link.href)}
-                className={`w-full max-w-xs py-3 text-center text-xl font-medium transition-colors hover:text-primary sm:text-2xl ${
-                  activeSection === link.href ? "text-primary" : "text-foreground"
+                className={`rounded-xl px-4 py-3 text-left text-base font-medium transition-colors hover:bg-muted ${
+                  activeSection === link.href
+                    ? "text-primary"
+                    : "text-foreground"
                 }`}
               >
                 {link.label}
