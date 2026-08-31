@@ -1,6 +1,6 @@
 export const profile = {
   name: "Istheak Ahmed Sayem",
-  image: "/profile.jpg",
+  image: "/sayemdev.jpeg",
   title: "MERN Stack Developer / Full-Stack Developer",
   tagline: "Building scalable, modern web applications with the MERN stack",
   bio: [
