@@ -123,18 +123,22 @@ html.lenis body {
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
   }
+
   ::selection {
     background-color: rgba(99, 102, 241, 0.3);
     color: inherit;
   }
+
   html {
     scroll-behavior: smooth;
   }
+
   /* Visible focus for accessibility */
   :focus-visible {
     outline: 2px solid var(--ring);
@@ -149,13 +153,16 @@ html.dark {
 ::-webkit-scrollbar {
   width: 8px;
 }
+
 ::-webkit-scrollbar-track {
   background: transparent;
 }
+
 ::-webkit-scrollbar-thumb {
   background: var(--border);
   border-radius: 4px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: var(--muted-foreground);
 }
@@ -188,26 +195,51 @@ html.dark {
 
 /* Slow, very subtle ambient drift for aurora blobs */
 @keyframes aurora-drift-a {
-  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
-  50% { transform: translate3d(3%, -4%, 0) scale(1.08); }
+
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate3d(3%, -4%, 0) scale(1.08);
+  }
 }
+
 @keyframes aurora-drift-b {
-  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
-  50% { transform: translate3d(-4%, 3%, 0) scale(1.1); }
+
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate3d(-4%, 3%, 0) scale(1.1);
+  }
 }
+
 @keyframes aurora-drift-c {
-  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
-  50% { transform: translate3d(2%, 5%, 0) scale(1.05); }
+
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate3d(2%, 5%, 0) scale(1.05);
+  }
 }
 
 @utility aurora-anim-a {
   animation: aurora-drift-a 32s ease-in-out infinite;
   will-change: transform;
 }
+
 @utility aurora-anim-b {
   animation: aurora-drift-b 40s ease-in-out infinite;
   will-change: transform;
 }
+
 @utility aurora-anim-c {
   animation: aurora-drift-c 46s ease-in-out infinite;
   will-change: transform;
@@ -215,11 +247,9 @@ html.dark {
 
 /* Radial glow used behind hero / sections */
 @utility radial-glow {
-  background: radial-gradient(
-    circle at var(--glow-x, 50%) var(--glow-y, 0%),
-    var(--glow-color, rgba(99, 102, 241, 0.18)),
-    transparent 60%
-  );
+  background: radial-gradient(circle at var(--glow-x, 50%) var(--glow-y, 0%),
+      var(--glow-color, rgba(99, 102, 241, 0.18)),
+      transparent 60%);
 }
 
 @utility text-gradient {
@@ -235,11 +265,13 @@ html.dark {
   margin-right: auto;
   padding-left: 1rem;
   padding-right: 1rem;
-  @media (width >= 640px) {
+
+  @media (width >=640px) {
     padding-left: 1.5rem;
     padding-right: 1.5rem;
   }
-  @media (width >= 1024px) {
+
+  @media (width >=1024px) {
     padding-left: 2rem;
     padding-right: 2rem;
   }
@@ -248,11 +280,13 @@ html.dark {
 @utility section-padding {
   padding-top: 5rem;
   padding-bottom: 5rem;
-  @media (width >= 640px) {
+
+  @media (width >=640px) {
     padding-top: 7rem;
     padding-bottom: 7rem;
   }
-  @media (width >= 1024px) {
+
+  @media (width >=1024px) {
     padding-top: 9rem;
     padding-bottom: 9rem;
   }
@@ -263,6 +297,7 @@ html.dark {
   from {
     transform: translateX(0);
   }
+
   to {
     transform: translateX(-50%);
   }
@@ -277,66 +312,149 @@ html.dark {
 }
 
 @keyframes shine {
-  0% { background-position: 200% center; }
-  100% { background-position: -200% center; }
+  0% {
+    background-position: 200% center;
+  }
+
+  100% {
+    background-position: -200% center;
+  }
 }
 
 @keyframes noise {
-  0%, 100% { transform: translate(0, 0); }
-  10% { transform: translate(-5%, -5%); }
-  20% { transform: translate(-10%, 5%); }
-  30% { transform: translate(5%, -10%); }
-  40% { transform: translate(-5%, 15%); }
-  50% { transform: translate(-10%, 5%); }
-  60% { transform: translate(15%, 0); }
-  70% { transform: translate(0, 10%); }
-  80% { transform: translate(-15%, 0); }
-  90% { transform: translate(10%, 5%); }
+
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+
+  10% {
+    transform: translate(-5%, -5%);
+  }
+
+  20% {
+    transform: translate(-10%, 5%);
+  }
+
+  30% {
+    transform: translate(5%, -10%);
+  }
+
+  40% {
+    transform: translate(-5%, 15%);
+  }
+
+  50% {
+    transform: translate(-10%, 5%);
+  }
+
+  60% {
+    transform: translate(15%, 0);
+  }
+
+  70% {
+    transform: translate(0, 10%);
+  }
+
+  80% {
+    transform: translate(-15%, 0);
+  }
+
+  90% {
+    transform: translate(10%, 5%);
+  }
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-12px); }
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-12px);
+  }
 }
 
 @keyframes pulse-dot {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(1.5); }
+
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.5;
+    transform: scale(1.5);
+  }
 }
 
 @keyframes gradient-shift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 @keyframes spin-slow {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
 }
 
 @keyframes scale-in {
-  from { transform: scale(0.8); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 @utility animate-shine {
   animation: shine 3s linear infinite;
 }
+
 @utility animate-noise {
   animation: noise 0.5s steps(5) infinite;
 }
+
 @utility animate-float {
   animation: float 4s ease-in-out infinite;
 }
+
 @utility animate-pulse-dot {
   animation: pulse-dot 2s ease-in-out infinite;
 }
+
 @utility animate-spin-slow {
   animation: spin-slow 16s linear infinite;
 }
@@ -347,6 +465,7 @@ html.dark {
 
 /* Honour reduced-motion preferences */
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
